@@ -1,16 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { pieceSelect } from "../../app/reducers/board-reducer";
+import { getValidMoves } from "../../services";
 import "./Board.css";
-import { boardInitialState } from "../../app/states/board-state";
 
 export const Board = () => {
-  const boardArray = boardInitialState.board;
-  const handleClick = (row, col, square) => {
-    console.log(row, col);
-    console.log(square);
+  const [clickedPiece, setClickedPiece] = useState();
+  const [validSquareSelect, setValidSquareSelect] = useState();
+  const { board, playerTurn } = useSelector((state) => state);
+  const dispatch = useDispatch();
+  const handleClick = async (row, col, square) => {
+    if (square.symbol && square.color === playerTurn) {
+      const selectedPiece = {
+        piece: square,
+        position: {
+          rowPos: row,
+          columnPos: col,
+        },
+      };
+      getValidMoves(selectedPiece, board);
+
+    }
   };
   return (
     <div className="board">
-      {boardArray.map((row, i) => (
+      {board.map((row, i) => (
         <div className="row" key={i}>
           {row.map((square, j) => (
             <div
