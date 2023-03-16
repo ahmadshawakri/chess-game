@@ -22,10 +22,19 @@ export const chessBoard = [
     piecesInitialState.black.pawn8,
   ],
 
+  [
+    piecesInitialState.white.pawn1,
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    piecesInitialState.white.pawn1,
+  ],
   ["", "", "", "", "", "", "", ""],
-  ["", "", "", "", "", "", "", ""],
-  ["", "", "", "", "", "", "", ""],
-  ["", "", "", "", "", "", "", ""],
+  [piecesInitialState.black.pawn8, "", "", "", "", "", "", ""],
+  ["", "", "", "", "", "", "", piecesInitialState.black.pawn8],
   [
     piecesInitialState.white.pawn1,
     piecesInitialState.white.pawn2,

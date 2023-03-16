@@ -1,4 +1,5 @@
 import { boardInitialState } from "../states";
+import produce from "immer";
 
 export const selectPiece = "selectPiece";
 export const setPlayerTurn = "setPlayerTurn";
@@ -45,7 +46,9 @@ export const boardReducer = (state = boardInitialState, action) => {
   switch (action.type) {
     case selectPiece:
       console.log(action.payload);
-      return state;
+      return produce(state, (draft) => {
+        draft.selectedPiece = action.payload;
+      });
     case setPlayerTurn:
       console.log(action.type);
       return state;
