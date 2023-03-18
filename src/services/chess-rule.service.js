@@ -10,8 +10,70 @@ const queenMoves = (position, pieceColor, board) => {
 };
 const bishopMoves = (position, pieceColor, board) => {
   const { rowPos, columnPos } = position;
-  console.log(rowPos, columnPos);
-  return;
+  const validMoves = [];
+
+  //Top Right Moves
+  for (let i = 1; i <= 7; i++) {
+    const newRow = rowPos - i;
+    const newColmn = columnPos + i;
+    if (newRow < 0 || newColmn > 7 || newColmn < 0 || newRow > 7) break;
+    if (board[newRow][newColmn] === "") {
+      validMoves.push({ row: newRow, col: newColmn });
+    } else if (board[newRow][newColmn].color !== pieceColor) {
+      validMoves.push({ row: newRow, col: newColmn });
+      break;
+    } else {
+      break;
+    }
+  }
+
+  //Top Left
+  for (let i = 1; i <= 7; i++) {
+    const newRow = rowPos - i;
+    const newColmn = columnPos - i;
+    if (newRow < 0 || newColmn > 7 || newColmn < 0 || newRow > 7) break;
+    if (board[newRow][newColmn] === "") {
+      validMoves.push({ row: newRow, col: newColmn });
+    } else if (board[newRow][newColmn]?.color !== pieceColor) {
+      validMoves.push({ row: newRow, col: newColmn });
+      break;
+    } else {
+      break;
+    }
+  }
+
+  //Bottom Right
+  for (let i = 1; i <= 7; i++) {
+    const newRow = rowPos + i;
+    const newColmn = columnPos + i;
+    if (newRow < 0 || newColmn > 7 || newColmn < 0 || newRow > 7) break;
+    if (board[newRow][newColmn] === "") {
+      validMoves.push({ row: newRow, col: newColmn });
+    } else if (board[newRow][newColmn]?.color !== pieceColor) {
+      validMoves.push({ row: newRow, col: newColmn });
+      break;
+    } else {
+      break;
+    }
+  }
+
+  //Bottom Left
+  for (let i = 1; i <= 7; i++) {
+    const newRow = rowPos + i;
+    const newColmn = columnPos - i;
+    if (newRow < 0 || newColmn > 7 || newColmn < 0 || newRow > 7) break;
+    if (board[newRow][newColmn] === "") {
+      validMoves.push({ row: newRow, col: newColmn });
+    } else if (board[newRow][newColmn]?.color !== pieceColor) {
+      validMoves.push({ row: newRow, col: newColmn });
+      break;
+    } else {
+      break;
+    }
+  }
+
+  console.log(validMoves);
+  return validMoves;
 };
 const knightMoves = (position, pieceColor, board) => {
   const { rowPos, columnPos } = position;
@@ -32,12 +94,12 @@ const pawnMoves = (position, pieceColor, board) => {
     const newRow = rowPos + row;
     if (newRow < 0 || newRow >= 8) return;
     if (board[newRow][columnPos] !== "") return;
-    validMoves.push([newRow, columnPos]);
+    validMoves.push({ row: newRow, col: columnPos });
 
     if (rowPos === 6 || rowPos === 1) {
       const twoStepsRow = newRow + row;
       if (board[twoStepsRow][columnPos] === "") {
-        validMoves.push([twoStepsRow, columnPos]);
+        validMoves.push({ row: twoStepsRow, col: columnPos });
       }
     }
   };
@@ -50,7 +112,7 @@ const pawnMoves = (position, pieceColor, board) => {
       board[newRow][columnPos - 1].symbol &&
       board[newRow][columnPos - 1].color !== pieceColor
     ) {
-      validMoves.push([newRow, columnPos - 1]);
+      validMoves.push({ row: newRow, col: columnPos - 1 });
     }
     //Right Pos for White & Left Pos for Black
     if (
@@ -58,7 +120,7 @@ const pawnMoves = (position, pieceColor, board) => {
       board[newRow][columnPos + 1]?.symbol &&
       board[newRow][columnPos + 1].color !== pieceColor
     ) {
-      validMoves.push([newRow, columnPos + 1]);
+      validMoves.push({ row: newRow, col: columnPos + 1 });
     }
   };
 
@@ -87,8 +149,8 @@ export const getValidMoves = (selectedPiece, board) => {
       queenMoves(position, piece.color, board);
       break;
     case "b":
-      bishopMoves(position, piece.color, board);
-      break;
+      const bishopValidMoves = bishopMoves(position, piece.color, board);
+      return bishopValidMoves;
     case "n":
       knightMoves(position, piece.color, board);
       break;

@@ -1,37 +1,37 @@
 import { boardInitialState } from "../states";
 import produce from "immer";
 
+export const boardHasChanged = "boardHasChanged";
 export const selectPiece = "selectPiece";
 export const setPlayerTurn = "setPlayerTurn";
 export const setValidMoves = "setValidMoves";
-export const pieceHasMoved = "pieceHasMoved";
 export const setHistory = "setHistory";
 
-export const pieceSelect = (selectedPiece) => {
+export const changedBoard = (newBoard) => {
+  return {
+    type: boardHasChanged,
+    payload: newBoard,
+  };
+};
+
+export const pieceHasSelected = (selectedPiece) => {
   return {
     type: selectPiece,
     payload: selectedPiece,
   };
 };
 
-export const playerTurn = (player) => {
+export const playerTurnChanged = (player) => {
   return {
     type: setPlayerTurn,
     payload: player,
   };
 };
 
-export const validMoves = (moves) => {
+export const validMovesCalculated = (moves) => {
   return {
     type: setValidMoves,
     payload: moves,
-  };
-};
-
-export const pieceMove = (hasMoved) => {
-  return {
-    type: pieceHasMoved,
-    payload: hasMoved,
   };
 };
 
@@ -44,22 +44,27 @@ export const history = (moveHistory) => {
 
 export const boardReducer = (state = boardInitialState, action) => {
   switch (action.type) {
+    case boardHasChanged:
+      return produce(state, (draft) => {
+        draft.board = action.payload;
+        draft.selectedPiece = null;
+        draft.validMoves = [];
+      });
     case selectPiece:
-      console.log(action.payload);
       return produce(state, (draft) => {
         draft.selectedPiece = action.payload;
       });
     case setPlayerTurn:
-      console.log(action.type);
-      return state;
+      return produce(state, (draft) => {
+        draft.playerTurn = action.payload;
+      });
     case setValidMoves:
-      console.log(action.type);
-      return state;
-    case pieceHasMoved:
-      console.log(action.payload);
-      return state;
+      // console.log(action.payload);
+      return produce(state, (draft) => {
+        draft.validMoves = action.payload;
+      });
     case setHistory:
-      console.log(action.type);
+      console.log(action.payload);
       return state;
     default:
       return state;

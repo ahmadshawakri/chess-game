@@ -1,16 +1,24 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { pieceSelect } from "../../app/reducers/board-reducer";
+import {
+  pieceHasSelected,
+  validMovesCalculated,
+  changedBoard,
+  playerTurnChanged,
+} from "../../app/reducers/board-reducer";
 import { getValidMoves } from "../../services";
 import "./Board.css";
 
 export const Board = () => {
-  const { board, playerTurn, selectedPiece } = useSelector((state) => state);
+  const { board, playerTurn, selectedPiece, validMoves } = useSelector(
+    (state) => state
+  );
+  Object.freeze(board);
   const dispatch = useDispatch();
-  const handleClick = async (row, col, square) => {
-    if (square.color === playerTurn) {
-      if (square.symbol && !selectedPiece) {
-        console.log("First Click");
+
+  const handleClick = (row, col, square) => {
+    const handleFirstClick = () => {
+      if (square.color === playerTurn && square.symbol) {
         const pieceInfo = {
           piece: square,
           position: {
@@ -18,16 +26,51 @@ export const Board = () => {
             columnPos: col,
           },
         };
-        const validMoves = await getValidMoves(pieceInfo, board);
-        console.log(validMoves);
-        dispatch(pieceSelect(pieceInfo));
+        const pieceValidMoves = getValidMoves(pieceInfo, board);
+        dispatch(pieceHasSelected(pieceInfo));
+        dispatch(validMovesCalculated(pieceValidMoves));
       }
-      if (selectedPiece && square) {
-        console.log(selectedPiece);
-        console.log("Second Click");
+    };
+
+    const handleSecondClick = () => {
+      if (selectedPiece) {
+        if (validMoves?.some((move) => move.row === row && move.col === col)) {
+          if (board[row][col] !== "") {
+            board[row][col] = "";
+            board[row][col] = selectedPiece.piece;
+            board[selectedPiece.position.rowPos][
+              selectedPiece.position.columnPos
+            ] = "";
+          } else {
+            [
+              board[selectedPiece.position.rowPos][
+                selectedPiece.position.columnPos
+              ],
+              board[row][col],
+            ] = [
+              board[row][col],
+              board[selectedPiece.position.rowPos][
+                selectedPiece.position.columnPos
+              ],
+            ];
+          }
+
+          dispatch(changedBoard(board));
+          const newTurnColor = playerTurn === "white" ? "black" : "white";
+          dispatch(playerTurnChanged(newTurnColor));
+        } else {
+          handleFirstClick();
+        }
       }
+    };
+
+    if (!selectedPiece) {
+      handleFirstClick();
+    } else {
+      handleSecondClick();
     }
   };
+
   return (
     <div className="board">
       {board.map((row, i) => (
