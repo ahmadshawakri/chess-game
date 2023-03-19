@@ -1,3 +1,11 @@
+.chessCont{
+  display: flex;
+  /* align-items: center; */
+  /* justify-content: center; */
+  margin: 1rem;
+  gap: 4rem;
+}
+
 .board {
   display: flex;
   flex-direction: column;

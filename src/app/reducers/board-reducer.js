@@ -64,10 +64,10 @@ export const boardReducer = (state = boardInitialState, action) => {
         draft.validMoves = action.payload;
       });
     case setHistory:
-      // console.log(action.payload);
       return produce(state, (draft) => {
-        draft.history = [...draft.history, action.payload];
+        draft.history = [...state.history, action.payload];
       });
+
     default:
       return state;
   }

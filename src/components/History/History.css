@@ -1,0 +1,6 @@
+.historyCont {
+  display: flex;
+  flex-direction: column;
+  min-width: 20rem;
+  align-items: center;
+}

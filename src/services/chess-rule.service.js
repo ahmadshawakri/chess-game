@@ -123,7 +123,6 @@ const queenMoves = (position, pieceColor, board) => {
     }
   }
 
-  console.log(rowPos, columnPos);
   return validMoves;
 };
 const bishopMoves = (position, pieceColor, board) => {
@@ -190,7 +189,6 @@ const bishopMoves = (position, pieceColor, board) => {
     }
   }
 
-  console.log(validMoves);
   return validMoves;
 };
 const knightMoves = (position, pieceColor, board) => {
@@ -214,8 +212,6 @@ const knightMoves = (position, pieceColor, board) => {
   checkMove(1, 2);
   checkMove(1, -2);
 
-  console.log(rowPos, columnPos);
-  console.log(validMoves);
   return validMoves;
 };
 const rookMoves = (position, pieceColor, board) => {
@@ -278,8 +274,6 @@ const rookMoves = (position, pieceColor, board) => {
     }
   }
 
-  console.log(rowPos, columnPos);
-  console.log(validMoves);
   return validMoves;
 };
 

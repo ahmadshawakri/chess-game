@@ -36,17 +36,31 @@ export const Board = () => {
 
     const handleSecondClick = () => {
       if (validMoves?.some((move) => move.row === row && move.col === col)) {
+        let hist = "";
         const columnLetter = ["A", "B", "C", "D", "E", "F", "G", "H"];
-        const hist = `${selectedPiece.piece.symbol}${
-          columnLetter[selectedPiece.position.columnPos]
-        }${selectedPiece.position.rowPos} -> ${columnLetter[col]}${row}`;
         if (board[row][col] !== "") {
+          //Capture Piece History
+          const move = `${selectedPiece.piece.symbol}${
+            columnLetter[selectedPiece.position.columnPos]
+          }${selectedPiece.position.rowPos} x ${board[row][col].symbol}${
+            columnLetter[col]
+          }${row}`;
+
+          hist = { player: playerTurn, movement: move };
+
           board[row][col] = "";
           board[row][col] = selectedPiece.piece;
           board[selectedPiece.position.rowPos][
             selectedPiece.position.columnPos
           ] = "";
         } else {
+          //Regular Move History
+          const move = `${selectedPiece.piece.symbol}${
+            columnLetter[selectedPiece.position.columnPos]
+          }${selectedPiece.position.rowPos} -> ${columnLetter[col]}${row}`;
+
+          hist = { player: playerTurn, movement: move };
+
           [
             board[selectedPiece.position.rowPos][
               selectedPiece.position.columnPos
@@ -59,6 +73,7 @@ export const Board = () => {
             ],
           ];
         }
+
         const newTurnColor = playerTurn === "white" ? "black" : "white";
         dispatch(historyChanged(hist));
         dispatch(changedBoard(board));
@@ -76,29 +91,33 @@ export const Board = () => {
   };
 
   return (
-    <div className="board">
-      {board.map((row, i) => (
-        <div className="row" key={i}>
-          {row.map((square, j) => (
-            <div
-              className={`square ${i % 2 === j % 2 ? "white" : "black"} `}
-              key={j}
-              onClick={() => handleClick(i, j, square)}
-            >
+    <div className="chessCont">
+      <div className="board">
+        {board.map((row, i) => (
+          <div className="row" key={i}>
+            {row.map((square, j) => (
               <div
-                className={`${
-                  validMoves?.some((move) => move.row === i && move.col === j)
-                    ? "validMove"
-                    : ""
-                }`}
+                className={`square ${i % 2 === j % 2 ? "white" : "black"} `}
+                key={j}
+                onClick={() => handleClick(i, j, square)}
               >
-                {square.image && <img src={square.image} alt={square.symbol} />}
+                <div
+                  className={`${
+                    validMoves?.some((move) => move.row === i && move.col === j)
+                      ? "validMove"
+                      : ""
+                  }`}
+                >
+                  {square.image && (
+                    <img src={square.image} alt={square.symbol} />
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      ))}
-      {history.length > 0 && <History />}
+            ))}
+          </div>
+        ))}
+      </div>
+      <History />
     </div>
   );
 };
