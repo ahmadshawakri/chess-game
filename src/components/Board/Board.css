@@ -29,3 +29,9 @@ img {
   width: 3rem;
   height: 3rem;
 }
+
+.validMove {
+  width: 3rem;
+  height: 3rem;
+  background: rgba(255, 0, 0, 0.3);
+}

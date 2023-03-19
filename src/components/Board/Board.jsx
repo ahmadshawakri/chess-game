@@ -1,16 +1,18 @@
 import React from "react";
+import { History } from "../History/History";
 import { useSelector, useDispatch } from "react-redux";
 import {
   pieceHasSelected,
   validMovesCalculated,
   changedBoard,
   playerTurnChanged,
+  historyChanged,
 } from "../../app/reducers/board-reducer";
 import { getValidMoves } from "../../services";
 import "./Board.css";
 
 export const Board = () => {
-  const { board, playerTurn, selectedPiece, validMoves } = useSelector(
+  const { board, playerTurn, selectedPiece, validMoves, history } = useSelector(
     (state) => state
   );
   Object.freeze(board);
@@ -33,34 +35,36 @@ export const Board = () => {
     };
 
     const handleSecondClick = () => {
-      if (selectedPiece) {
-        if (validMoves?.some((move) => move.row === row && move.col === col)) {
-          if (board[row][col] !== "") {
-            board[row][col] = "";
-            board[row][col] = selectedPiece.piece;
+      if (validMoves?.some((move) => move.row === row && move.col === col)) {
+        const columnLetter = ["A", "B", "C", "D", "E", "F", "G", "H"];
+        const hist = `${selectedPiece.piece.symbol}${
+          columnLetter[selectedPiece.position.columnPos]
+        }${selectedPiece.position.rowPos} -> ${columnLetter[col]}${row}`;
+        if (board[row][col] !== "") {
+          board[row][col] = "";
+          board[row][col] = selectedPiece.piece;
+          board[selectedPiece.position.rowPos][
+            selectedPiece.position.columnPos
+          ] = "";
+        } else {
+          [
             board[selectedPiece.position.rowPos][
               selectedPiece.position.columnPos
-            ] = "";
-          } else {
-            [
-              board[selectedPiece.position.rowPos][
-                selectedPiece.position.columnPos
-              ],
-              board[row][col],
-            ] = [
-              board[row][col],
-              board[selectedPiece.position.rowPos][
-                selectedPiece.position.columnPos
-              ],
-            ];
-          }
-
-          dispatch(changedBoard(board));
-          const newTurnColor = playerTurn === "white" ? "black" : "white";
-          dispatch(playerTurnChanged(newTurnColor));
-        } else {
-          handleFirstClick();
+            ],
+            board[row][col],
+          ] = [
+            board[row][col],
+            board[selectedPiece.position.rowPos][
+              selectedPiece.position.columnPos
+            ],
+          ];
         }
+        const newTurnColor = playerTurn === "white" ? "black" : "white";
+        dispatch(historyChanged(hist));
+        dispatch(changedBoard(board));
+        dispatch(playerTurnChanged(newTurnColor));
+      } else {
+        handleFirstClick();
       }
     };
 
@@ -77,15 +81,24 @@ export const Board = () => {
         <div className="row" key={i}>
           {row.map((square, j) => (
             <div
-              className={`square ${i % 2 === j % 2 ? "white" : "black"}`}
+              className={`square ${i % 2 === j % 2 ? "white" : "black"} `}
               key={j}
               onClick={() => handleClick(i, j, square)}
             >
-              {square.image && <img src={square.image} alt={square.symbol} />}
+              <div
+                className={`${
+                  validMoves?.some((move) => move.row === i && move.col === j)
+                    ? "validMove"
+                    : ""
+                }`}
+              >
+                {square.image && <img src={square.image} alt={square.symbol} />}
+              </div>
             </div>
           ))}
         </div>
       ))}
+      {history.length > 0 && <History />}
     </div>
   );
 };

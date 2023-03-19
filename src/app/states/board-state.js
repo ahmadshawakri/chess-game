@@ -23,8 +23,8 @@ export const chessBoard = [
   ],
 
   ["", "", "", "", "", "", "", ""],
-  ["", "", "", "", "", piecesInitialState.white.leftBishop, "", ""],
-  ["", "", piecesInitialState.black.leftBishop, "", "", "", "", ""],
+  ["", "", "", "", "", "", "", ""],
+  ["", "", "", "", "", "", "", ""],
   ["", "", "", "", "", "", "", ""],
   [
     piecesInitialState.white.pawn1,
@@ -53,6 +53,7 @@ export const boardInitialState = {
   playerTurn: "white",
   selectedPiece: null,
   validMoves: [],
+  history: [],
   check: false,
   checkMate: false,
 };
