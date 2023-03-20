@@ -3,4 +3,35 @@
   flex-direction: column;
   min-width: 20rem;
   align-items: center;
+  border: .3125rem solid #000;
+  border-radius: 1rem;
 }
+
+.gameInfoTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.gameInfoTable th, .gameInfoTable td {
+  padding: 8px;
+  text-align: left;
+  vertical-align: middle;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.gameInfoTable th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.gameInfoTable tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.gameInfoTable tr:hover {
+  background-color: #ddd;
+}
+

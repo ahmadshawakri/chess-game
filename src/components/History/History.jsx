@@ -6,7 +6,7 @@ export const History = () => {
   return (
     <div className="historyCont">
       <h3>Game Info</h3>
-      <table>
+      <table className="gameInfoTable">
         <thead>
           <tr>
             <td>

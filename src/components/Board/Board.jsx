@@ -12,7 +12,7 @@ import { getValidMoves } from "../../services";
 import "./Board.css";
 
 export const Board = () => {
-  const { board, playerTurn, selectedPiece, validMoves, history } = useSelector(
+  const { board, playerTurn, selectedPiece, validMoves } = useSelector(
     (state) => state
   );
   Object.freeze(board);

@@ -1,7 +1,6 @@
 .chessCont{
   display: flex;
-  /* align-items: center; */
-  /* justify-content: center; */
+  justify-content: center;
   margin: 1rem;
   gap: 4rem;
 }

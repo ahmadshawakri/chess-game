@@ -1,6 +1,34 @@
-const kingMoves = (position, pieceColor, board) => {
+export const kingMoves = (position, pieceColor, board) => {
   const { rowPos, columnPos } = position;
+  const validMoves = [];
+  const checkIsValid = (rowOffset, colOffset) => {
+    const newRow = rowPos + rowOffset;
+    const newColumn = columnPos + colOffset;
+
+    if (newRow < 0 || newRow > 7 || newColumn < 0 || newColumn > 7) return;
+    if (board[newRow][newColumn].color === pieceColor) return;
+    validMoves.push({ row: newRow, col: newColumn });
+  };
+
+  //Top
+  checkIsValid(-1, 0);
+  //Bottom
+  checkIsValid(1, 0);
+  //Right
+  checkIsValid(0, 1);
+  //Left
+  checkIsValid(0, -1);
+  //Top Right
+  checkIsValid(-1, 1);
+  //Top Left
+  checkIsValid(1, -1);
+  //Bottom Right
+  checkIsValid(1, 1);
+  //Bottom Left
+  checkIsValid(1, -1);
+
   console.log(rowPos, columnPos);
+  console.log(validMoves);
   return;
 };
 const queenMoves = (position, pieceColor, board) => {
