@@ -1,16 +1,17 @@
 export const kingMoves = (position, pieceColor, board) => {
   const { rowPos, columnPos } = position;
   const validMoves = [];
+
   const checkIsValid = (rowOffset, colOffset) => {
     const newRow = rowPos + rowOffset;
     const newColumn = columnPos + colOffset;
 
     if (newRow < 0 || newRow > 7 || newColumn < 0 || newColumn > 7) return;
-    if (board[newRow][newColumn].color === pieceColor) return;
+    if (board[newRow][newColumn]?.color === pieceColor) return;
     validMoves.push({ row: newRow, col: newColumn });
   };
 
-  //Top
+  //TopkingRow, kingCoulmn
   checkIsValid(-1, 0);
   //Bottom
   checkIsValid(1, 0);
@@ -27,9 +28,7 @@ export const kingMoves = (position, pieceColor, board) => {
   //Bottom Left
   checkIsValid(1, -1);
 
-  console.log(rowPos, columnPos);
-  console.log(validMoves);
-  return;
+  return validMoves;
 };
 const queenMoves = (position, pieceColor, board) => {
   const { rowPos, columnPos } = position;
@@ -41,7 +40,7 @@ const queenMoves = (position, pieceColor, board) => {
     if (newColumn > 7 || newColumn < 0) break;
     if (board[rowPos][newColumn] === "") {
       validMoves.push({ row: rowPos, col: newColumn });
-    } else if (board[rowPos][newColumn].color !== pieceColor) {
+    } else if (board[rowPos][newColumn]?.color !== pieceColor) {
       validMoves.push({ row: rowPos, col: newColumn });
       break;
     } else {
@@ -98,7 +97,7 @@ const queenMoves = (position, pieceColor, board) => {
     if (newRow < 0 || newColumn > 7 || newColumn < 0 || newRow > 7) break;
     if (board[newRow][newColumn] === "") {
       validMoves.push({ row: newRow, col: newColumn });
-    } else if (board[newRow][newColumn].color !== pieceColor) {
+    } else if (board[newRow][newColumn]?.color !== pieceColor) {
       validMoves.push({ row: newRow, col: newColumn });
       break;
     } else {
@@ -227,7 +226,7 @@ const knightMoves = (position, pieceColor, board) => {
     const newRow = rowPos + rowOffset;
     const newColumn = columnPos + colOffset;
     if (newRow < 0 || newRow > 7 || newColumn < 0 || newColumn > 7) return;
-    if (board[newRow][newColumn].color === pieceColor) return;
+    if (board[newRow][newColumn]?.color === pieceColor) return;
     validMoves.push({ row: newRow, col: newColumn });
   };
 
@@ -252,7 +251,7 @@ const rookMoves = (position, pieceColor, board) => {
     if (newColumn > 7 || newColumn < 0) break;
     if (board[rowPos][newColumn] === "") {
       validMoves.push({ row: rowPos, col: newColumn });
-    } else if (board[rowPos][newColumn].color !== pieceColor) {
+    } else if (board[rowPos][newColumn]?.color !== pieceColor) {
       validMoves.push({ row: rowPos, col: newColumn });
       break;
     } else {
@@ -312,7 +311,7 @@ const pawnMoves = (position, pieceColor, board) => {
   const moveForward = (row) => {
     const newRow = rowPos + row;
     if (newRow < 0 || newRow >= 8) return;
-    if (board[newRow][columnPos] !== "") return;
+    if (board[newRow][columnPos] && board[newRow][columnPos] !== "") return;
     validMoves.push({ row: newRow, col: columnPos });
 
     if (rowPos === 6 || rowPos === 1) {
@@ -328,8 +327,8 @@ const pawnMoves = (position, pieceColor, board) => {
     //Left Pos for white & Right Pos for Black
     if (
       columnPos > 0 &&
-      board[newRow][columnPos - 1].symbol &&
-      board[newRow][columnPos - 1].color !== pieceColor
+      board[newRow][columnPos - 1]?.symbol &&
+      board[newRow][columnPos - 1]?.color !== pieceColor
     ) {
       validMoves.push({ row: newRow, col: columnPos - 1 });
     }

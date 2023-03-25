@@ -9,6 +9,7 @@ import {
   historyChanged,
 } from "../../app/reducers/board-reducer";
 import { getValidMoves } from "../../services";
+import { isCheckMate } from "../../services";
 import "./Board.css";
 
 export const Board = () => {
@@ -19,6 +20,9 @@ export const Board = () => {
   const dispatch = useDispatch();
 
   const handleClick = (row, col, square) => {
+    // const attackingPlayer = playerTurn === "white" ? "black" : "white";
+    isCheckMate(board, playerTurn);
+
     const handleFirstClick = () => {
       if (square.color === playerTurn && square.symbol) {
         const pieceInfo = {
@@ -73,7 +77,6 @@ export const Board = () => {
             ],
           ];
         }
-
         const newTurnColor = playerTurn === "white" ? "black" : "white";
         dispatch(historyChanged(hist));
         dispatch(changedBoard(board));

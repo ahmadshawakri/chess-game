@@ -1,51 +1,52 @@
-import { kingMoves } from "./chess-rule.service";
+import { getValidMoves } from "./chess-rule.service";
 
-function isCheckMate(board, attackingPlayer, playerTurn) {
-  // Get the king's position
-  // const kingPosition = findKing(board, attackingPlayer);
-  const kingPosition =
-    playerTurn === "white" ? { row: 7, col: 4 } : { row: 0, col: 4 };
+export const isCheckMate = (board, currentPlayer) => {
+  console.log(isCheck(board, currentPlayer));
+  return;
+};
 
-  // Check if the king can move out of check
-  const kingValidMoves = kingMoves(kingPosition, playerTurn, board);
-  if (kingValidMoves.length > 0) {
-    return false;
+const isCheck = (board, currentPlayer) => {
+  //Find Current Player King
+  let kingPosition = null;
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[0].length; j++) {
+      const kingPiece = board[i][j];
+      if (
+        kingPiece &&
+        kingPiece?.color === currentPlayer &&
+        kingPiece?.symbol.toLowerCase() === "k"
+      ) {
+        kingPosition = { rowPos: i, columnPos: j };
+        break;
+      }
+    }
+    if (kingPosition) break;
   }
 
-  // Check if any piece can block the check
-  //   const checkingPiecePosition = getCheckingPiece(
-  //     board,
-  //     attackingPlayer,
-  //     kingPosition
-  //   );
-  //   const blockingMoves = getBlockingMoves(
-  //     board,
-  //     checkingPiecePosition,
-  //     kingPosition
-  //   );
-  //   if (blockingMoves.length > 0) {
-  //     return false;
-  //   }
-
-  //   // Check if any attacking piece can be captured
-  //   const attackingMoves = getAttackingMoves(
-  //     board,
-  //     attackingPlayer,
-  //     kingPosition
-  //   );
-  //   for (let move of attackingMoves) {
-  //     const testBoard = getTestBoard(board, kingPosition, move);
-  //     const opponentMoves = getAllMoves(testBoard, getOpponent(attackingPlayer));
-  //     if (
-  //       !opponentMoves.some(
-  //         (opponentMove) =>
-  //           opponentMove.row === move.row && opponentMove.col === move.col
-  //       )
-  //     ) {
-  //       return false;
-  //     }
-  //   }
-
-  // If none of the above conditions are met, then it is checkmate
-  return true;
-}
+  // Check if any of the opponent's pieces can attack the king
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[0].length; j++) {
+      const piece = board[i][j];
+      if (piece && piece?.color !== currentPlayer) {
+        const pieceInfo = {
+          piece,
+          position: {
+            rowPos: i,
+            columnPos: j,
+          },
+        };
+        const moves = getValidMoves(pieceInfo, board);
+        if (
+          moves?.some(
+            (move) =>
+              move.row === kingPosition.rowPos &&
+              move.col === kingPosition.columnPos
+          )
+        ) {
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+};
