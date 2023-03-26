@@ -20,8 +20,7 @@ export const Board = () => {
   const dispatch = useDispatch();
 
   const handleClick = (row, col, square) => {
-    // const attackingPlayer = playerTurn === "white" ? "black" : "white";
-    isCheckMate(board, playerTurn);
+    console.log("Is Check Mate:", isCheckMate(board, playerTurn));
 
     const handleFirstClick = () => {
       if (square.color === playerTurn && square.symbol) {
@@ -33,13 +32,13 @@ export const Board = () => {
           },
         };
         const pieceValidMoves = getValidMoves(pieceInfo, board);
-        console.log(
-          pieceValidMoves?.some(
-            (move) =>
-              (move.row === 7 && move.col === 4) ||
-              (move.row === 0 && move.col === 4)
-          )
-        );
+        // console.log(
+        //   pieceValidMoves?.some(
+        //     (move) =>
+        //       (move.row === 7 && move.col === 4) ||
+        //       (move.row === 0 && move.col === 4)
+        //   )
+        // );
         dispatch(pieceHasSelected(pieceInfo));
         dispatch(validMovesCalculated(pieceValidMoves));
       }
@@ -47,8 +46,6 @@ export const Board = () => {
 
     const handleSecondClick = () => {
       if (validMoves?.some((move) => move.row === row && move.col === col)) {
-        console.log(validMoves);
-
         let hist = "";
         const columnLetter = ["A", "B", "C", "D", "E", "F", "G", "H"];
         if (board[row][col] !== "") {
